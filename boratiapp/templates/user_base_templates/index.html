@@ -1,0 +1,121 @@
+{% extends 'user_base_templates/base.html' %}
+
+{% block title %}Boraati{% endblock %}
+
+{% block content %}
+<div class="space-y-12">
+ <!-- Room Listings Section -->
+    <!-- Room Listings Section -->
+<section class="space-y-4">
+
+    <!-- Header fi Floor Filter Categories -->
+    <div class="space-y-4">
+    <!-- Title & Description Section -->
+           <div class="sticky top-16 z-30 py-4 bg-[#fafaed] border-b-2 border-gray-300 space-y-3">
+           <div class="flex flex-col">
+            <h2 class="text-2xl font-semibold text-stone-900  tracking-tight">Available Rooms</h2>
+            <p class="text-xl text-stone-900 mt-0.5 ">Select a floor category or browse rooms below to proceed with booking.</p>
+           </div>
+
+        <!-- Floor Category Filter Pills / Tabs -->
+          <div class="w-full flex items-center justify-start flex-wrap gap-2">
+            <a href="?" class="px-3.5 py-1.5 rounded-full text-xl font-semibold transition {% if not request.GET.floor %}bg-gray-900 text-white shadow-sm{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                All Floors
+            </a>
+            {% for f in floors %}
+                <a href="?floor={{ f.id }}" class="px-3.5 py-1.5 rounded-full text-xl font-medium transition {% if request.GET.floor == f.id|stringformat:'s' %}bg-gray-900 text-white shadow-sm{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                    {{ f.floor_name }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Rooms Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% if rooms %}
+        {% for room in rooms %}
+        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden flex flex-col justify-between hover:border-gray-300 transition shadow-sm">
+                
+                <!-- Room Image -->
+                <div class="h-48 bg-gray-100 border-b border-gray-100 relative overflow-hidden">
+                    {% if room.main_image %}
+                        <img src="{{ room.main_image.url }}" alt="Room {{ room.room_number }}" class="w-full h-full object-cover">
+                    {% elif room.image %}
+                        <img src="{{ room.image.url }}" alt="Room {{ room.room_number }}" class="w-full h-full object-cover">
+                    {% else %}
+                        <!-- No Image Available State -->
+                        <div class="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-gray-50 text-xs">
+                            <svg class="w-8 h-8 mb-1 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>No Image Available</span>
+                        </div>
+                    {% endif %}
+
+                    <!-- Price Tag -->
+                    <span class="absolute top-3 right-3 px-2 py-1 bg-white/90 backdrop-blur border border-gray-200 rounded text-xs font-semibold text-gray-900 shadow-sm">
+                        {{ room.price_per_night }} ETB / night
+                    </span>
+
+                    <!-- Floor Name Badge (Fkn: Ground Floor, Floor 1...) -->
+                    {% if room.floor %}
+                        <span class="absolute top-3 left-3 px-2 py-1 bg-gray-900/80 backdrop-blur rounded text-[11px] font-medium text-white shadow-sm">
+                            {{ room.floor.floor_name }}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <!-- Room Info -->
+                <div class="p-5 flex-grow space-y-3">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Room #{{ room.room_number }}</h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider mt-0.5">{{ room.room_type }}</p>
+                    </div>
+                    
+                    <p class="text-xs text-gray-600 line-clamp-2 leading-relaxed">
+                        {{ room.description|default:"Clean, spacious, and fully furnished room for a relaxing stay." }}
+                    </p>
+                </div>
+
+                <!-- Card Action Footer -->
+                <div class="px-5 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
+                    <a href="{% url 'room_detail' room.id %}" class="text-xs font-medium text-gray-600 hover:text-gray-900 transition">
+                        View Details →
+                    </a>
+                    <a href="{% url 'checkout' room.id %}" class="px-4 py-2 bg-gray-900 text-white rounded text-xs font-medium hover:bg-gray-800 transition">
+                        Book Now
+                    </a>
+                </div>
+
+            </div>
+        {% endfor %}
+    {% else %}
+        <!-- Placeholder when no rooms exist under this floor -->
+        <div class="col-span-full bg-white border border-dashed border-gray-200 rounded-lg p-12 text-center text-sm text-gray-400">
+            No rooms are currently available under this floor category. Please check another floor or check back later.
+        </div>
+    {% endif %}
+      </div>
+    </section>
+
+    <!-- Amenities / Features Minimal Grid -->
+    <section class="bg-white border border-gray-200 rounded-lg p-8 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+        <div class="space-y-2 p-2">
+            <span class="text-2xl block">🔒</span>
+            <h3 class="text-sm font-semibold text-gray-900">24/7 Security</h3>
+            <p class="text-xs text-gray-500">Safe, quiet environment with round-the-clock premise protection.</p>
+        </div>
+        <div class="space-y-2 p-2 border-t md:border-t-0 md:border-l border-gray-100 pt-6 md:pt-2">
+            <span class="text-2xl block">🛏️</span>
+            <h3 class="text-sm font-semibold text-gray-900">Clean & Maintained</h3>
+            <p class="text-xs text-gray-500">Regularly sanitized, comfortable bedding and essential amenities.</p>
+        </div>
+        <div class="space-y-2 p-2 border-t md:border-t-0 md:border-l border-gray-100 pt-6 md:pt-2">
+            <span class="text-2xl block">⚡</span>
+            <h3 class="text-sm font-semibold text-gray-900">Fast Verification</h3>
+            <p class="text-xs text-gray-500">Easy check-in verification using receipt reference codes.</p>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

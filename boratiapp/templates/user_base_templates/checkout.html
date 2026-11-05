@@ -1,0 +1,129 @@
+{% extends 'user_base_templates/base.html' %}
+
+{% block title %}Checkout & Reservation - {{ room.name }} - Boraati Guest House{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-6">
+    
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-2xl font-semibold tracking-tight text-gray-900">Complete Your Reservation</h1>
+        <p class="text-sm text-gray-500 mt-1">Please fill in your booking details to reserve your room at Boraati Guest House.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left Column: Checkout Form (2 Columns wide) -->
+        <div class="lg:col-span-2 space-y-6">
+            <form action="{% url 'checkout' room.id %}" method="post" enctype="multipart/form-data" class="bg-white border border-gray-200 rounded-lg p-6 space-y-6 shadow-sm">
+                {% csrf_token %}
+
+                <!-- Guest Information Section -->
+                <div>
+                    <h2 class="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Guest Information</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="full_name" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Full Name</label>
+                            <input type="text" id="full_name" name="guest_full_name" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900">
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Phone Number</label>
+                            <input type="tel" id="phone" name="guest_phone" required placeholder="+251 ..." class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label for="National_id" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">National ID</label>
+                            <input type="text" id="national_id_number" name="national_id_number" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stay Details Section -->
+                <div>
+                    <h2 class="text-base font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-100">Stay Details</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="check_in_date" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Check-in Date</label>
+                            <input type="date" id="check_in" name="check_in" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900">
+                        </div>
+                        <div>
+                            <label for="check_out_date" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Check-out Date</label>
+                            <input type="date" id="check_out" name="check_out" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900">
+                        </div>
+                    </div>
+                </div>
+
+               <div>
+                <label for="payment_method" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Payment Method</label>
+                <select id="payment_method" name="payment_method" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900">
+               <option value="" disabled selected>Select payment method</option>
+                 <option value="Telebirr">Telebirr</option>
+               <option value="CBE">CBE (Commercial Bank of Ethiopia)</option>
+                 <option value="Bank of Abyssinia">Bank of Abyssinia</option>
+                <option value="Cash">Cash</option>
+                </select>
+               </div>
+
+                           <div>
+                            <label for="transaction_ref" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">TXID</label>
+                            <input type="text" id="transaction_ref" name="transaction_ref" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900">
+                          </div>
+
+                <!-- Submit Action -->
+                <div class="pt-4 border-t border-gray-100">
+                    <button type="submit" class="w-full bg-gray-900 text-white py-3 px-4 rounded-md text-sm font-medium hover:bg-gray-800 transition">
+                        Confirm & Reserve Room
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Column: Room & Price Summary Sidebar -->
+        <div class="space-y-6">
+            <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-4 sticky top-24">
+                <h2 class="text-base font-semibold text-gray-900 border-b border-gray-100 pb-2">Reservation Summary</h2>
+                
+                <!-- Room Brief Card -->
+                <div class="flex items-center space-x-3">
+                    {% if room.image %}
+                        <img src="{{ room.image.url }}" alt="{{ room.name }}" class="w-16 h-16 rounded object-cover border border-gray-200">
+                    {% else %}
+                        <div class="w-16 h-16 bg-gray-100 rounded flex items-center justify-center text-gray-400 text-xs border border-gray-200">
+                            No Image
+                        </div>
+                    {% endif %}
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900">{{ room.name }}</h3>
+                        <p class="text-xs text-gray-500">{{ room.room_type }}</p>
+                    </div>
+                </div>
+
+                <hr class="border-gray-100">
+
+                <!-- Price Details Breakdown -->
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between text-gray-600">
+                        <span>Rate per night</span>
+                        <span class="font-medium text-gray-900">{{ room.price_per_night }} ETB</span>
+                    </div>
+                    <div class="flex justify-between text-gray-600">
+                        <span>Status</span>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+                            Available
+                        </span>
+                    </div>
+                </div>
+
+                <hr class="border-gray-100">
+
+                <!-- Support & Help -->
+                <div class="bg-gray-50 border border-gray-200 rounded-md p-3 text-xs text-gray-500 space-y-1">
+                    <p class="font-medium text-gray-700">Need Assistance?</p>
+                    <p>For instant assistance or payment questions, please contact our front desk at +251 900 000 000.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'admin_base_templates/base_admin.html' %}
+
+{% block title %}Financial Report {% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight text-gray-900">Financial Performance & Report</h1>
+            <p class="text-sm text-gray-500 mt-1">Overview of total revenues, operational expenses, and net profitability for Boraati Guest House.</p>
+        </div>
+        <div class="flex items-center space-x-3">
+            <a href="{% url 'admin_add_expense' %}" class="px-4 py-2 bg-gray-900 text-white rounded-md text-sm font-medium hover:bg-gray-800 transition shadow-sm">
+                + Record Expense
+            </a>
+        </div>
+    </div>
+
+    <!-- Summary Metric Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        
+        <!-- Total Revenue -->
+        <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-2">
+            <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Revenue</p>
+            <p class="text-2xl font-bold text-gray-900">{{ total_revenue|default:"0.00" }} ETB</p>
+            <p class="text-xs text-green-600 font-medium">From verified guest bookings</p>
+        </div>
+
+        <!-- Total Expenses -->
+        <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-2">
+            <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Total Expenses</p>
+            <p class="text-2xl font-bold text-gray-900">{{ total_expenses|default:"0.00" }} ETB</p>
+            <p class="text-xs text-gray-500 font-medium">Utilities, maintenance & operating costs</p>
+        </div>
+
+        <!-- Net Profit -->
+        <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm space-y-2">
+            <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Net Profit / Loss</p>
+            <p class="text-2xl font-bold text-gray-900">{{ net_profit|default:"0.00" }} ETB</p>
+            <p class="text-xs text-gray-500 font-medium">Revenue minus total expenses</p>
+        </div>
+
+    </div>
+
+    <!-- Breakdown Sections Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Recent Verified Revenues -->
+        <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-gray-200 flex items-center justify-between">
+                <h2 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">Recent Revenues</h2>
+                <span class="text-xs text-gray-500">Verified Bookings</span>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="py-3 px-4">Guest</th>
+                            <th class="py-3 px-4">Room</th>
+                            <th class="py-3 px-4 text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% if recent_revenues %}
+                            {% for rev in recent_revenues %}
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="py-3 px-4 font-medium text-gray-900">{{ rev.full_name }}</td>
+                                    <td class="py-3 px-4 text-gray-600 text-xs">{{ rev.room.name }}</td>
+                                    <td class="py-3 px-4 text-right font-semibold text-gray-900">{{ rev.total_price }} ETB</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="3" class="py-8 text-center text-gray-400 text-xs">No verified revenue records found.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Recent Expenses -->
+        <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+            <div class="p-5 border-b border-gray-200 flex items-center justify-between">
+                <h2 class="text-sm font-semibold text-gray-900 uppercase tracking-wider">Recent Expenses</h2>
+                <a href="{% url 'admin_add_expense' %}" class="text-xs font-medium text-gray-600 hover:text-gray-900">Add New →</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="py-3 px-4">Title</th>
+                            <th class="py-3 px-4">Category</th>
+                            <th class="py-3 px-4 text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% if recent_expenses %}
+                            {% for exp in recent_expenses %}
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="py-3 px-4 font-medium text-gray-900">{{ exp.title }}</td>
+                                    <td class="py-3 px-4 text-xs text-gray-600 capitalize">{{ exp.category }}</td>
+                                    <td class="py-3 px-4 text-right font-semibold text-gray-900">{{ exp.amount }} ETB</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="3" class="py-8 text-center text-gray-400 text-xs">No operational expenses recorded.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

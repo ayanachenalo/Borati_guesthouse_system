@@ -1,0 +1,104 @@
+{% extends 'admin_base_templates/base_admin.html' %}
+
+{% block title %}Room Form - Boraati Admin Panel{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto space-y-6">
+    
+    <!-- Page Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight text-gray-900">
+                {% if room %}Edit Room: {{ room.name }}{% else %}Add New Room{% endif %}
+            </h1>
+            <p class="text-sm text-gray-500 mt-1">Configure room specifications, pricing, availability status, and photo preview.</p>
+        </div>
+        <a href="{% url 'admin_room_management' %}" class="text-xs font-medium text-gray-600 hover:text-gray-900 transition">
+            ← Back to Rooms
+        </a>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <form method="post" enctype="multipart/form-data" class="space-y-5">
+            {% csrf_token %}
+
+            <!-- Room Name -->
+              <div>
+              <label for="room_number" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Room Number</label>
+              <input type="text" id="room_number" name="room_number" required placeholder="e.g., 101, 202, A-1" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900">
+              </div>
+
+            <!-- Room Type & Price Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="room_type" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Room Type</label>
+                    <select id="room_type" name="room_type" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900">
+                        <option value="" disabled {% if not room %}selected{% endif %}>Select room type</option>
+                        <option value="Single" {% if room and room.room_type == 'Single' %}selected{% endif %}>Single Room</option>
+                        <option value="Double" {% if room and room.room_type == 'Double' %}selected{% endif %}>Double Room</option>
+                        <option value="Deluxe" {% if room and room.room_type == 'Deluxe' %}selected{% endif %}>Deluxe Suite</option>
+                        <option value="Standard" {% if room and room.room_type == 'Standard' %}selected{% endif %}>Standard Room</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="price_per_night" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Price per Night (ETB)</label>
+                    <input type="number" step="0.01" id="price_per_night" name="price_per_night" value="{{ room.price_per_night|default:'' }}" required placeholder="0.00" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900">
+                </div>
+            </div>
+
+            <!-- Status & Floor Selection (Optional depending on model) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="status" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Availability Status</label>
+                    <select id="status" name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900">
+                        <option value="available" {% if not room or room.status == 'available' %}selected{% endif %}>Available</option>
+                        <option value="booked" {% if room and room.status == 'booked' %}selected{% endif %}>Booked / Occupied</option>
+                        <option value="maintenance" {% if room and room.status == 'maintenance' %}selected{% endif %}>Under Maintenance</option>
+                    </select>
+                </div>
+                <div>
+                <div>
+                  <label for="floor" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Floor</label>
+                  <select id="floor" name="floor" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900">
+                 <option value="" disabled {% if not room or not room.floor %}selected{% endif %}>Select floor</option>
+                 {% for f in floors %}
+                <option value="{{ f.id }}" {% if room and room.floor and room.floor.id == f.id %}selected{% endif %}>{{ f.floor_name }} ({{ f.building.building_name }})</option>
+               {% endfor %}
+            </select>
+           </div>
+            
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label for="description" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Room Description</label>
+                <textarea id="description" name="description" rows="4" placeholder="Describe room amenities, bed size, view, or specific features..." class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-gray-900 focus:border-gray-900">{{ room.description|default:'' }}</textarea>
+            </div>
+
+            <!-- Room Image Upload -->
+            <div>
+                <label for="image" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Room Image / Photo</label>
+                {% if room and room.image %}
+                    <div class="mb-2 flex items-center space-x-3 text-xs text-gray-500">
+                        <span class="font-medium text-gray-700">Current Image:</span>
+                        <a href="{{ room.image.url }}" target="_blank" class="text-blue-600 hover:underline">View Uploaded Image</a>
+                    </div>
+                {% endif %}
+                <input type="file" id="image" name="main_image" accept="image/*" class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200">
+            </div>
+
+            <!-- Actions -->
+            <div class="pt-4 border-t border-gray-100 flex items-center justify-end space-x-3">
+                <a href="{% url 'admin_room_management' %}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+                    Cancel
+                </a>
+                <button type="submit" class="px-5 py-2 bg-gray-900 text-white rounded-md text-sm font-medium hover:bg-gray-800 transition shadow-sm">
+                    {% if room %}Update Room{% else %}Save Room{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

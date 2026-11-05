@@ -1,0 +1,87 @@
+{% extends 'user_base_templates/base.html' %}
+
+{% block title %}{{ room.name|default:"Room Detail" }} - Boraati Guest House{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-6 space-y-8">
+    
+    <!-- Navigation Breadcrumb -->
+    <div>
+        <a href="{% url 'user_index' %}" class="inline-flex items-center text-xs font-medium text-gray-500 hover:text-gray-900 transition">
+            ← Back to All Rooms
+        </a>
+    </div>
+
+    {% if room and room.id %}
+        <!-- Main Room Presentation Card -->
+        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+            
+            <!-- Room Image -->
+            <div class="h-64 sm:h-80 md:h-96 bg-gray-100 border-b border-gray-200 relative">
+                {% if room.image %}
+                    <img src="{{ room.image.url }}" alt="{{ room.name }}" class="w-full h-full object-cover">
+                {% else %}
+                    <div class="w-full h-full flex flex-col items-center justify-center text-gray-400 space-y-2">
+                        <span class="text-3xl">🛏️</span>
+                        <span class="text-xs">No Room Preview Image Available</span>
+                    </div>
+                {% endif %}
+
+                <!-- Floating Price Badge -->
+                <span class="absolute bottom-4 right-4 px-3 py-1.5 bg-white/95 backdrop-blur border border-gray-200 rounded-md text-sm font-semibold text-gray-900 shadow-sm">
+                    {{ room.price_per_night }} ETB <span class="text-xs font-normal text-gray-500">/ night</span>
+                </span>
+            </div>
+
+            <!-- Room Details & Action Section -->
+            <div class="p-6 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Left 2 Columns -->
+                <div class="md:col-span-2 space-y-6">
+                    <div>
+                        <span class="text-xs uppercase bg-gray-100 text-gray-600 px-2.5 py-1 rounded font-medium">
+                            {{ room.room_type }}
+                        </span>
+                        <h1 class="text-2xl font-bold tracking-tight text-gray-900 mt-3">{{ room.name }}</h1>
+                        <p class="text-xs text-gray-400 mt-1">Room ID: #{{ room.id }}</p>
+                    </div>
+
+                    <div class="border-t border-gray-100 pt-4">
+                        <h2 class="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-2">Room Overview</h2>
+                        <p class="text-sm text-gray-600 leading-relaxed">
+                            {{ room.description|default:"Experience a quiet and relaxing stay in this clean, well-maintained room." }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right Column: Booking Action -->
+                <div class="space-y-4">
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-5 space-y-4">
+                        <div>
+                            <p class="text-xs text-gray-500 uppercase tracking-wider">Rate</p>
+                            <p class="text-xl font-bold text-gray-900 mt-0.5">{{ room.price_per_night }} ETB</p>
+                            <p class="text-xs text-gray-400">per night</p>
+                        </div>
+
+                        <!-- Checkout Link with room.id check -->
+                        <a href="{% url 'checkout' room.id %}" class="block w-full text-center bg-gray-900 text-white py-2.5 px-4 rounded-md text-sm font-medium hover:bg-gray-800 transition shadow-sm">
+                            Proceed to Book
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    {% else %}
+        <!-- Error State if room is not found -->
+        <div class="bg-white border border-gray-200 rounded-lg p-12 text-center space-y-3">
+            <h2 class="text-lg font-semibold text-gray-900">Room Not Found</h2>
+            <p class="text-sm text-gray-500">The room you are looking for does not exist or has been removed.</p>
+            <a href="{% url 'user_index' %}" class="inline-block mt-4 px-4 py-2 bg-gray-900 text-white rounded text-xs font-medium">
+                Return to Home
+            </a>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+<aside class="w-full md:w-64 flex-shrink-0">
+    <div class="bg-white border border-gray-200 rounded-lg p-4 space-y-2 sticky top-24">
+        
+        <!-- Dashboard -->
+        <a href="{% url 'admin_dashboard' %}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition">
+            📊 Dashboard
+        </a>
+
+        <!-- 1. MANAGE ROOMS (Dropdown) -->
+        <div class="space-y-1">
+            <button onclick="toggleDropdown('rooms-dropdown')" class="w-full flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition focus:outline-none">
+                <span class="flex items-center">🛏️ Manage Rooms</span>
+                <svg id="rooms-dropdown-icon" class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            
+            <div id="rooms-dropdown" class="hidden pl-6 space-y-1">
+                <a href="{% url 'admin_room_management' %}" class="block px-3 py-1.5 rounded-md text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
+                    • Rooms List
+                </a>
+                <a href="{% url 'admin_add_room' %}" class="block px-3 py-1.5 rounded-md text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
+                    • Add Room
+                </a>
+            </div>
+        </div>
+
+        <!-- 2. MANAGE FINANCIAL (Dropdown) -->
+        <div class="space-y-1">
+            <button onclick="toggleDropdown('financial-dropdown')" class="w-full flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition focus:outline-none">
+                <span class="flex items-center">💰 Manage Financial</span>
+                <svg id="financial-dropdown-icon" class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            
+            <div id="financial-dropdown" class="hidden pl-6 space-y-1">
+                <a href="{% url 'admin_financial_report' %}" class="block px-3 py-1.5 rounded-md text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
+                    • Financial & Payment Report
+                </a>
+                <a href="{% url 'admin_add_expense' %}" class="block px-3 py-1.5 rounded-md text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
+                    • Add Expense
+                </a>
+            </div>
+        </div>
+
+        <!-- 3. BOOKING VERIFICATION -->
+        <a href="{% url 'admin_booking_verification' %}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition">
+            🔍 Check-in Receipt
+        </a>
+
+    </div>
+</aside>

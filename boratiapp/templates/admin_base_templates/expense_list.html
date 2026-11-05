@@ -1,0 +1,92 @@
+{% extends 'admin_base_templates/base_admin.html' %}
+
+{% block title %}Expense List - Boraati Admin Panel{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight text-gray-900">Operational Expenses</h1>
+            <p class="text-sm text-gray-500 mt-1">Track, review, and manage all operational costs, utilities, and maintenance expenditures.</p>
+        </div>
+        <div>
+            <a href="{% url 'admin_add_expense' %}" class="inline-flex items-center px-4 py-2 bg-gray-900 text-white rounded-md text-sm font-medium hover:bg-gray-800 transition shadow-sm">
+                + Record New Expense
+            </a>
+        </div>
+    </div>
+
+    <!-- Expenses Table Card -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="py-3 px-4">Title / Description</th>
+                        <th class="py-3 px-4">Category</th>
+                        <th class="py-3 px-4">Date</th>
+                        <th class="py-3 px-4">Amount</th>
+                        <th class="py-3 px-4">Receipt</th>
+                        <th class="py-3 px-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-sm">
+                    {% if expenses %}
+                        {% for expense in expenses %}
+                            <tr class="hover:bg-gray-50 transition">
+                                <!-- Title / Description -->
+                                <td class="py-4 px-4 font-medium text-gray-900">
+                                    {{ expense.title }}
+                                </td>
+                                
+                                <!-- Category Badge -->
+                                <td class="py-4 px-4">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700 capitalize">
+                                        {{ expense.category }}
+                                    </span>
+                                </td>
+                                
+                                <!-- Expense Date -->
+                                <td class="py-4 px-4 text-xs text-gray-600">
+                                    {{ expense.expense_date }}
+                                </td>
+                                
+                                <!-- Amount -->
+                                <td class="py-4 px-4 font-semibold text-gray-900">
+                                    {{ expense.amount }} ETB
+                                </td>
+                                
+                                <!-- Receipt / Document Link -->
+                                <td class="py-4 px-4 text-xs">
+                                    {% if expense.receipt %}
+                                        <a href="{{ expense.receipt.url }}" target="_blank" class="text-blue-600 hover:underline font-medium">View File</a>
+                                    {% else %}
+                                        <span class="text-gray-400">None</span>
+                                    {% endif %}
+                                </td>
+                                
+                                <!-- Actions -->
+                                <td class="py-4 px-4 text-right space-x-2">
+                                    <a href="{% url 'admin_financial_report' %}" class="text-xs font-medium text-gray-600 hover:text-gray-900 transition">
+                                        Financial Report
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <!-- Empty State -->
+                        <tr>
+                            <td colspan="6" class="py-12 text-center text-gray-400 text-sm">
+                                No expenses recorded yet. Click "+ Record New Expense" above to add one.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

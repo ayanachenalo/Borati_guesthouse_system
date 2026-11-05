@@ -1,0 +1,94 @@
+{% extends 'admin_base_templates/base_admin.html' %}
+
+{% block title %}Manage Bookings{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight text-gray-900">Bookings & Verifications</h1>
+            <p class="text-sm text-gray-500 mt-1">Review guest reservations, inspect payment transaction receipts, and manage check-ins.</p>
+        </div>
+    </div>
+
+    <!-- Bookings Table Card -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="py-3 px-4">ID / Guest Details</th>
+                        <th class="py-3 px-4">Room</th>
+                        <th class="py-3 px-4">Stay Dates</th>
+                        <th class="py-3 px-4">Amount</th>
+                        <th class="py-3 px-4">Status</th>
+                        <th class="py-3 px-4 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 text-sm">
+                    {% if bookings %}
+                        {% for booking in bookings %}
+                            <tr class="hover:bg-gray-50 transition">
+                                <!-- Guest Info -->
+                                <td class="py-4 px-4">
+                                    <div class="font-medium text-gray-900">#{{ booking.id }} - {{ booking.full_name }}</div>
+                                    <div class="text-xs text-gray-500">{{ booking.phone }}</div>
+                                </td>
+                                
+                                <!-- Room Name -->
+                                <td class="py-4 px-4 text-gray-700 font-medium">
+                                    {{ booking.room.name }}
+                                </td>
+                                
+                                <!-- Dates -->
+                                <td class="py-4 px-4 text-xs text-gray-600">
+                                    <div>In: {{ booking.check_in_date }}</div>
+                                    <div>Out: {{ booking.check_out_date }}</div>
+                                </td>
+                                
+                                <!-- Price -->
+                                <td class="py-4 px-4 font-semibold text-gray-900">
+                                    {{ booking.total_price }} ETB
+                                </td>
+                                
+                                <!-- Status Badge -->
+                                <td class="py-4 px-4">
+                                    {% if booking.is_verified %}
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-50 text-green-700 border border-green-200">
+                                            Verified
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                                            Pending Review
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                
+                                <!-- Action Buttons -->
+                                <td class="py-4 px-4 text-right space-x-2">
+                                    <a href="{% url 'admin_verify_payment' booking.id %}" class="inline-block px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded text-xs font-medium transition">
+                                        Verify Receipt
+                                    </a>
+                                    <a href="{% url 'admin_process_check_in' booking.id %}" class="inline-block px-3 py-1 bg-gray-900 hover:bg-gray-800 text-white rounded text-xs font-medium transition">
+                                        Check-in
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <!-- Empty State -->
+                        <tr>
+                            <td colspan="6" class="py-12 text-center text-gray-400 text-sm">
+                                No bookings found in the system right now.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
