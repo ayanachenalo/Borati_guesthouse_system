@@ -2,11 +2,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from boratiapp import views as admin_views
 
 urlpatterns = [
-    path('admin/', admin.site.urls), # Django default admin (optional)
-    path('accounts/', include('allauth.urls')), # Allauth urls kan user social median ittin seenu
-    path('', include('boratiapp.urls')), # App urls keenya hundi as jala jiru
+    path('admin/', admin.site.urls), 
+    path('accounts/', include('allauth.urls')), 
+    path('', include('boratiapp.urls')), 
 ]
 
 # Media files (suuraalee kutaawwan upload godhaman agarsiisuuf)

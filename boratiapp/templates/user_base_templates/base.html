@@ -32,10 +32,18 @@
             <!-- Public Navigation Links -->
            <!-- Public Navigation Links -->
            <nav class="hidden md:flex items-center space-x-3 text-sm font-semibold text-gray-800 ml-auto">
-           <a href="{% url 'admin_dashboard' %}" class="px-3 py-2 rounded-lg hover:-translate-y-0.5 transition duration-200 bg-[#d8d2cb] shadow-sm hover:shadow-md">Dashboard</a>
-          <a href="{% url 'admin_room_management' %}" class="px-3 py-2 rounded-lg hover:-translate-y-0.5 transition duration-200 bg-[#d8d2cb] shadow-sm hover:shadow-md">Rooms</a>
-          <a href="{% url 'admin_booking_verification' %}" class="px-3 py-2 rounded-lg hover:-translate-y-0.5 transition duration-200 bg-[#d8d2cb] shadow-sm hover:shadow-md">Receipt Check</a>
-            <!-- User Actions / Login / Status -->
+             <a href="{% url 'user_index' %}" class="hover:text-gray-900 transition">
+             Rooms
+             </a>
+             <a href="{% url 'about_page' %}" class="hover:text-gray-900 transition">
+                   About Us
+               </a>
+              <a href="{% url 'contact_page' %}" class="hover:text-gray-900 transition">
+               Contact Us
+                 </a>
+               <a href="{% url 'feedback_page' %}" class="hover:text-gray-900 transition">
+             Feedback
+               </a>
             {% if user.is_authenticated %}
                     <span class="text-sm text-gray-600"> {{ request.user.username }}</span>
                     <!--<a href="{% url 'admin_dashboard' %}" class="text-sm text-gray-900 font-medium hover:underline">Dashboard</a>-->

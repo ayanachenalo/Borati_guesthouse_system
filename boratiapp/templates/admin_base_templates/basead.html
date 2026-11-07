@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Boraati {% endblock %}</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="bg-[#F2F2F3] text-gray-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Public Navigation Header -->
+    <header class="bg-[#FBD8BC] text-stone-900  font-semibold shadow-sm  border-b border-gray-200 sticky top-0 z-50 ">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Brand Logo / Name -->
+            <div class="flex items-center space-x-3">
+                <a href="{% url 'user_index' %}" class="flex items-center space-x-2.5 group">
+                    <!-- Logo Image -->
+                    {% load static %}
+                    <img src="{% static 'images/sirelogo.jpg' %}" alt="Boraati Logo" class="w-14 h-14 rounded object-cover border border-gray-200">
+                    
+                    <span class="text-2xl font-semibold tracking-tight text-gray-900">BORATI</span>
+                </a>
+            </div>
+
+            <!-- Public Navigation Links -->
+           <!-- Public Navigation Links -->
+           <nav class="hidden md:flex items-center space-x-3 text-sm font-semibold text-gray-800 ml-auto">
+           
+            <!-- User Actions / Login / Status -->
+            {% if user.is_authenticated %}
+                    <span class="text-sm text-gray-600"> {{ request.user.username }}</span>
+                    <!--<a href="{% url 'admin_dashboard' %}" class="text-sm text-gray-900 font-medium hover:underline">Dashboard</a>-->
+                {% else %}
+                    <a href="#" class="px-4 py-2 rounded-lg hover:-translate-y-0.5 transition duration-200 bg-[#d8d2cb] shadow-sm hover:shadow-md">Sign In</a>
+                {% endif %}
+           </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Wrapper -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Django Messages (Alerts) -->
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded text-sm {% if message.tags == 'error' %}bg-red-50 text-red-700 border border-red-200{% else %}bg-green-50 text-green-700 border border-green-200{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Block Content for Public Pages -->
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Public Footer -->
+    <footer class=" bg-[#E9F7FB] border-t border-gray-200 py-6 text-center text-xl shadow-sm  font-semibold text-cyan-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-2">
+            <p>&copy; 2026 Boraati Guest House. All rights reserved.</p>
+            <p class="text-teal-950">Secure Accommodation in Ethiopia.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+{% extends 'user_base_templates/base.html' %}
+{% block title %}About Us - Boraati Guest House{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto py-12 px-4 space-y-8">
+    <div class="text-center space-y-3">
+        <h1 class="text-3xl font-bold text-gray-900">{{ about.title|default:"About Us" }}</h1>
+        <p class="text-gray-600 max-w-xl mx-auto text-sm">Boraati Guest House – Where cleanliness, tranquility, and reliable service come together.</p>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-8 shadow-sm space-y-6 text-sm text-gray-700 leading-relaxed">
+        <p>{{ about.description }}</p>
+        {% if about.mission %}
+            <h3 class="font-semibold text-gray-900 pt-4">Our Mission</h3>
+            <p>{{ about.mission }}</p>
+        {% endif %}
+        <div class="pt-4 border-t border-gray-100 flex flex-col sm:flex-row justify-between text-xs text-gray-500">
+            <span>📍 Location: {{ about.location }}</span>
+            <span>📞 Phone: {{ about.phone }}</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

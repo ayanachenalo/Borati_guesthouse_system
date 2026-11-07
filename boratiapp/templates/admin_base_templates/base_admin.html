@@ -23,7 +23,7 @@
                 <a href="{% url 'admin_dashboard' %}" class="flex items-center space-x-2.5 group">
                     <img src="{% static 'images/sirelogo.jpg' %}" alt="Boraati Logo" class="w-10 h-10 rounded object-cover border border-gray-200">
                     <span class="text-lg font-semibold tracking-tight text-gray-900">
-                        BORATI SYSTEM <span class="text-xs uppercase bg-gray-100 text-gray-600 px-2 py-0.5 rounded ml-1 font-normal">Admin</span>
+                        BORATI SYSTEM 
                     </span>
                 </a>
             </div>
@@ -33,16 +33,23 @@
                 <a href="{% url 'admin_dashboard' %}" class="hover:text-gray-900 transition">Dashboard</a>
                 <a href="{% url 'admin_room_management' %}" class="hover:text-gray-900 transition">Rooms</a>
                 <a href="{% url 'admin_booking_verification' %}" class="hover:text-gray-900 transition"> Check Reciept </a>
+
             </nav>
 
             <!-- Admin Profile / Logout -->
             <div class="flex items-center space-x-4">
-                <span class="text-sm text-gray-500 hidden sm:inline">{{ request.user.username }}</span>
-                <form action="{% url 'admin_dashboard' %}" method="post" class="inline">
-                    {% csrf_token %}
-                    <button type="submit" class="text-sm text-red-600 hover:text-red-700 font-medium">Logout</button>
-                </form>
-            </div>
+             <span class="text-sm text-gray-500 hidden sm:inline">{{ request.user.username }}</span>
+             <form action="{% url 'admin_logout' %}" method="POST" class="inline">
+    {% csrf_token %}
+    <button type="submit" class="w-full flex items-center px-4 py-2 text-xs font-medium text-red-600 hover:bg-red-50 rounded-lg transition">
+        <!-- Icon yoo barbaadde -->
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+        </svg>
+        Logout
+    </button>
+</form>
+</div>
         </div>
     </header>
 
@@ -78,8 +85,11 @@
     <script src="{% static 'js/sidebar.js' %}"></script>
 
     <!-- Minimalist Footer -->
-    <footer class="w-full bg-sky-500/100 border-t  border-gray-200 py-4 text-center text-xs text-white">
-        &copy; 2026 Boraati Guest House System. All rights reserved.
+    <footer class=" bg-[#E9F7FB] border-t border-gray-200 py-6 text-center text-xl shadow-sm  font-semibold text-cyan-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-2">
+            <p>&copy; 2026 Boraati Guest House. All rights reserved.</p>
+            <p class="text-teal-950">Secure Accommodation in Ethiopia.</p>
+        </div>
     </footer>
    
 </body>

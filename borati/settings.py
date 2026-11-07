@@ -137,6 +137,9 @@ AUTHENTICATION_BACKENDS = [
 # Redirect settings login erga xumurame booda gara eessaa deemuu qaba?
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+# Namni log in hin godhin yoo jiraate fuula kana irra deebisa
+LOGIN_URL = '/admin-login/'
+ALLOWED_HOSTS = ['*']
 
 
 # Email

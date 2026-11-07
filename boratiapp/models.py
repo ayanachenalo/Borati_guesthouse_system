@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 
 # Create your models here.
@@ -66,6 +67,17 @@ class Room(models.Model):
     # Suuraa fi ibsa
     main_image = models.ImageField(upload_to='rooms/', blank=True, null=True)
     description = models.TextField(help_text="Ibsa bal'aa fkn: Wi-Fi, Bishaan ho'aa, TV...")
+    
+    image_url = models.URLField(max_length=500, blank=True, null=True, help_text="Linkii suuraa (fkn: https://example.com/room.jpg)")
+
+    # Method / Property: Yoo linkiin jiraate linkii sana, yoo faayiliin uumamaa jiraate URL faayilichaa agarsiisuuf
+    @property
+    def get_image_display(self):
+        if self.image_url:
+            return self.image_url
+        elif self.image:
+            return self.image.url
+        return '/static/images/default_room.jpg'
     
     # Haala kutaa (Status)
     status = models.CharField(max_length=20, choices=ROOM_STATUS, default='available')
@@ -159,3 +171,37 @@ class Expense(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.amount} ETB"
+
+class ContactMessage(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(blank=True, null=True)
+    phone = models.CharField(max_length=20)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_resolved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Message from {self.name} ({self.phone})"
+
+# 2. Guest Feedback & Reviews Table
+class Feedback(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    guest_name = models.CharField(max_length=100)
+    rating = models.IntegerField(default=5, help_text="1 to 5 stars")
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False, help_text="Admin approve godhchuu qaba")
+
+    def __str__(self):
+        return f"Feedback by {self.guest_name} - {self.rating} Stars"
+
+# 3. About Us / Site Info Content Table (Optional dynamic content)
+class AboutContent(models.Model):
+    title = models.CharField(max_length=200, default="Waa'ee Boraati Guest House")
+    description = models.TextField(help_text="Tajaajilaa fi seenaa gabaabaa guest house")
+    mission = models.TextField(blank=True, null=True)
+    phone = models.CharField(max_length=20, default="+251...")
+    location = models.CharField(max_length=200, default="Bule Hora, Guji, Ethiopia")
+
+    def __str__(self):
+        return self.title

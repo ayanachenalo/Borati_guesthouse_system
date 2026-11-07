@@ -3,7 +3,7 @@
         
         <!-- Dashboard -->
         <a href="{% url 'admin_dashboard' %}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition">
-            📊 Dashboard
+            🗓️ Dashboard
         </a>
 
         <!-- 1. MANAGE ROOMS (Dropdown) -->
@@ -22,6 +22,10 @@
                 <a href="{% url 'admin_add_room' %}" class="block px-3 py-1.5 rounded-md text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
                     • Add Room
                 </a>
+                <a href="{% url 'admin_rooms' %}" class="block px-3 py-1.5 rounded-md text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
+                 • Manage & Edit Rooms
+                 </a>
+                
             </div>
         </div>
 
@@ -49,5 +53,15 @@
             🔍 Check-in Receipt
         </a>
 
+        <a href="{% url 'admin_messages' %}" class="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition">
+      📬 Messages & Feedbacks
+      </a>
+     <a href="{% url 'admin_edit_about' %}" class="block px-3 py-1.5 rounded-md text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
+       ✒️ Edit About Us Content
+      </a>
+      <a href="{% url 'admin_add_room_by_link' %}" class="block px-3 py-1.5 rounded-md text-xs font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition">
+       • Add Room (via URL Link)
+       </a>
+       
     </div>
 </aside>
