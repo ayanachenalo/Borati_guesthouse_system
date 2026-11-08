@@ -118,7 +118,8 @@ USE_TZ = True
 
 #wantoota asitti dabalaman kannee akka userrole, mediaroot/url,staic/root/url
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Media URLs fi File paths
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
